@@ -343,7 +343,7 @@
   };
 
   /**
-   * Convert a normalised MediaPipe landmark to canvas pixels (non-mirrored).
+   * Convert a normalised MediaPipe landmark to canvas pixels.
    */
   function lmToCanvas (lm) {
     return {
@@ -571,7 +571,7 @@
 
     const lm = results.multiHandLandmarks[0];
 
-    // Convert landmark [0..1] → canvas pixels (non-mirrored)
+    // Convert landmark [0..1] → canvas pixels
     const tipLm = lm[8];
     const cx = tipLm.x * drawingCanvas.width;
     const cy = tipLm.y * drawingCanvas.height;
