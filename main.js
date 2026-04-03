@@ -343,11 +343,11 @@
   };
 
   /**
-   * Convert a normalised MediaPipe landmark to canvas pixels (mirrored for display).
+   * Convert a normalised MediaPipe landmark to canvas pixels (non-mirrored).
    */
   function lmToCanvas (lm) {
     return {
-      x: (1 - lm.x) * uiCanvas.width,
+      x: lm.x * uiCanvas.width,
       y: lm.y * uiCanvas.height,
     };
   }
@@ -571,9 +571,9 @@
 
     const lm = results.multiHandLandmarks[0];
 
-    // Convert landmark [0..1] → canvas pixels (mirrored for display)
+    // Convert landmark [0..1] → canvas pixels (non-mirrored)
     const tipLm = lm[8];
-    const cx = (1 - tipLm.x) * drawingCanvas.width;
+    const cx = tipLm.x * drawingCanvas.width;
     const cy = tipLm.y * drawingCanvas.height;
 
     const raw     = rawGesture(lm);
@@ -625,7 +625,7 @@
     } else if (gesture === 'ERASE') {
       // Erasing uses palm center (landmark 9)
       const palLm = lm[9];
-      const px = (1 - palLm.x) * drawingCanvas.width;
+      const px = palLm.x * drawingCanvas.width;
       const py = palLm.y * drawingCanvas.height;
       eraseAt(px, py, 40);
       // Commit current stroke if any
