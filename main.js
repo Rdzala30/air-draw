@@ -343,11 +343,11 @@
   };
 
   /**
-   * Convert a normalised MediaPipe landmark to mirrored canvas pixels.
+   * Convert a normalised MediaPipe landmark to canvas pixels.
    */
   function lmToCanvas (lm) {
     return {
-      x: (1 - lm.x) * uiCanvas.width,
+      x: lm.x * uiCanvas.width,
       y: lm.y * uiCanvas.height,
     };
   }
@@ -546,13 +546,9 @@
       fpsCounter.textContent = fps + ' fps';
     }
 
-    // Camera feed (mirrored)
+    // Camera feed (non-mirrored)
     if (showCamera) {
-      camCtx.save();
-      camCtx.translate(cameraCanvas.width, 0);
-      camCtx.scale(-1, 1);
       camCtx.drawImage(results.image, 0, 0, cameraCanvas.width, cameraCanvas.height);
-      camCtx.restore();
     } else {
       camCtx.clearRect(0, 0, cameraCanvas.width, cameraCanvas.height);
     }
@@ -572,9 +568,9 @@
 
     const lm = results.multiHandLandmarks[0];
 
-    // Convert landmark [0..1] → canvas pixels (mirrored for selfie mode)
+    // Convert landmark [0..1] → canvas pixels
     const tipLm = lm[8];
-    const cx = (1 - tipLm.x) * drawingCanvas.width;
+    const cx = tipLm.x * drawingCanvas.width;
     const cy = tipLm.y * drawingCanvas.height;
 
     const raw     = rawGesture(lm);
@@ -626,7 +622,7 @@
     } else if (gesture === 'ERASE') {
       // Erasing uses palm center (landmark 9)
       const palLm = lm[9];
-      const px = (1 - palLm.x) * drawingCanvas.width;
+      const px = palLm.x * drawingCanvas.width;
       const py = palLm.y * drawingCanvas.height;
       eraseAt(px, py, 40);
       // Commit current stroke if any
@@ -662,7 +658,7 @@
       modelComplexity:       isMobile ? 0 : 1,    // Lower complexity for mobile
       minDetectionConfidence: 0.72,
       minTrackingConfidence:  0.65,
-      selfieMode:            true,                // Mirror the camera feed
+      selfieMode:            false,               // Non-mirrored camera feed
     });
 
     hands.onResults(onHandResults);
