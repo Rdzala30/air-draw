@@ -548,7 +548,10 @@
 
     // Camera feed (non-mirrored)
     if (showCamera) {
-      camCtx.drawImage(results.image, 0, 0, cameraCanvas.width, cameraCanvas.height);
+      camCtx.save();
+      camCtx.scale(-1, 1);
+      camCtx.drawImage(results.image, -cameraCanvas.width, 0, cameraCanvas.width, cameraCanvas.height);
+      camCtx.restore();
     } else {
       camCtx.clearRect(0, 0, cameraCanvas.width, cameraCanvas.height);
     }
